@@ -14,6 +14,8 @@ class Create_Testes_Table {
 			$table->increments('id');
 
 			$table->string('nome');
+
+			$table->timestamps();
 		});
 	}
 

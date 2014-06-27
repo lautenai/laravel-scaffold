@@ -29,10 +29,12 @@ class Home_Controller extends Base_Controller {
 	|		}
 	|
 	*/
+	public $layout = 'templates.scaffold';
 
 	public function action_index()
 	{
-		return View::make('home.index');
+		$this->layout->title   = 'Home';
+		$this->layout->content = View::make('home.index');
 	}
 
 }

@@ -14,5 +14,5 @@ class Teste extends Eloquent {
 	 *
 	 * @var bool
 	 */
-	public static $timestamps = false;
+	public static $timestamps = true;
 }

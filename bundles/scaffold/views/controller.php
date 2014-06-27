@@ -23,7 +23,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function get_index()
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'index', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'index');
 
 <?php if($has_relationships): ?>
 		$<?php echo $plural; ?> = <?php echo $singular_class; ?>::with(array(<?php echo $with; ?>))->paginate(25);
@@ -42,7 +42,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function get_adicionar(<?php echo $belongs_to_params; ?>)
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'adicionar', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'adicionar');
 <?php foreach($belongs_to as $model): ?>				
 		$<?php echo $model; ?> = array('' => 'SELECIONE') + <?php echo ucfirst($model); ?>::order_by('id', 'asc')->take(999999)->lists('nome', 'id');
 <?php endforeach; ?>
@@ -69,7 +69,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function post_adicionar()
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'adicionar', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'adicionar');
 
 		$validation = Validator::make(Input::all(), array(
 <?php foreach($fields as $field => $type): ?>
@@ -119,7 +119,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function get_exibir($id)
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'exibir', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'exibir');
 
 <?php if($has_relationships): ?>
 		$<?php echo $singular; ?> = <?php echo $singular_class; ?>::with(array(<?php echo $with; ?>))->find($id);
@@ -148,7 +148,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function get_editar($id)
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'editar', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'editar');
 
 		$<?php echo $singular; ?> = <?php echo $singular_class; ?>::find($id);
 
@@ -172,7 +172,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function post_editar($id)
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'editar', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'editar');
 
 		$validation = Validator::make(Input::all(), array(
 <?php foreach($fields as $field => $type): ?>
@@ -225,7 +225,7 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	 */
 	public function get_excluir($id)
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'excluir', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'excluir');
 
 		$<?php echo $singular; ?> = <?php echo $singular_class; ?>::find($id);
 
@@ -240,17 +240,20 @@ class <?php echo $plural_class; ?>_Controller extends <?php echo $controller; ?>
 	}
 
 	/**
-	 * Checkbox delete to selected <?php echo $plural; ?>.
+	 * Delete selected <?php echo $plural; ?> checkboxes.
 	 *
 	 * @return Response
 	 */
 	public function post_checkbox()
 	{
-		//Authorized::check('<?php echo $nested_path.$plural; ?>', 'excluir', Auth::user()->id);
+		//Authority::check('<?php echo $nested_path.$plural; ?>', 'excluir');
 
 		$checkboxes = Input::get('checkbox');
 
-		if(!Input::has('checkbox')){ Session::flash('message', 'Nenhum item selecionado.'); return Redirect::to('<?php echo $nested_path.$plural; ?>'); }
+		if(!$checkboxes){
+			Session::flash('message', 'Nenhum item selecionado.');
+			return Redirect::to('<?php echo $nested_path.$plural; ?>');
+		}
 
 		<?php echo $singular_class; ?>::where_in('id', $checkboxes)->delete();
 

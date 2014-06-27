@@ -23,7 +23,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function get_index()
 	{
-		//Authorized::check('testes', 'index', Auth::user()->id);
+		//Authority::check('testes', 'index');
 
 		$testes = Teste::paginate(25);
 
@@ -38,7 +38,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function get_adicionar()
 	{
-		//Authorized::check('testes', 'adicionar', Auth::user()->id);
+		//Authority::check('testes', 'adicionar');
 
 		$this->layout->title   = 'Novo Teste';
 		$this->layout->content = View::make('testes.adicionar');
@@ -51,7 +51,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function post_adicionar()
 	{
-		//Authorized::check('testes', 'adicionar', Auth::user()->id);
+		//Authority::check('testes', 'adicionar');
 
 		$validation = Validator::make(Input::all(), array(
 			'nome' => array('required'),
@@ -86,7 +86,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function get_exibir($id)
 	{
-		//Authorized::check('testes', 'exibir', Auth::user()->id);
+		//Authority::check('testes', 'exibir');
 
 		$teste = Teste::find($id);
 
@@ -108,7 +108,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function get_editar($id)
 	{
-		//Authorized::check('testes', 'editar', Auth::user()->id);
+		//Authority::check('testes', 'editar');
 
 		$teste = Teste::find($id);
 
@@ -129,7 +129,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function post_editar($id)
 	{
-		//Authorized::check('testes', 'editar', Auth::user()->id);
+		//Authority::check('testes', 'editar');
 
 		$validation = Validator::make(Input::all(), array(
 			'nome' => array('required'),
@@ -169,7 +169,7 @@ class Testes_Controller extends Base_Controller {
 	 */
 	public function get_excluir($id)
 	{
-		//Authorized::check('testes', 'excluir', Auth::user()->id);
+		//Authority::check('testes', 'excluir');
 
 		$teste = Teste::find($id);
 
@@ -184,17 +184,20 @@ class Testes_Controller extends Base_Controller {
 	}
 
 	/**
-	 * Checkbox delete to selected testes.
+	 * Delete selected testes checkboxes.
 	 *
 	 * @return Response
 	 */
 	public function post_checkbox()
 	{
-		//Authorized::check('testes', 'excluir', Auth::user()->id);
+		//Authority::check('testes', 'excluir');
 
 		$checkboxes = Input::get('checkbox');
 
-		if(!Input::has('checkbox')){ Session::flash('message', 'Nenhum item selecionado.'); return Redirect::to('testes'); }
+		if(!$checkboxes){
+			Session::flash('message', 'Nenhum item selecionado.');
+			return Redirect::to('testes');
+		}
 
 		Teste::where_in('id', $checkboxes)->delete();
 
